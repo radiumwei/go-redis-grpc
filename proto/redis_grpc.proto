@@ -1,0 +1,84 @@
+syntax = "proto3";
+package redis_grpc;
+
+
+service RedisGrpc {
+  rpc command (CommandRequest) returns (CommandResponse);
+  rpc subscribe (SubscribeRequest) returns (stream SubscribeResponse);
+  rpc publish (PublishRequest) returns (IntResponse);
+  rpc keys (KeysRequest) returns (StringListResponse);
+  rpc get (GetRequest) returns (StringResponse);
+  rpc set (SetRequest) returns (StringResponse);
+  rpc del (DelRequest) returns (IntResponse);
+  rpc lpush (LPushRequest) returns (IntResponse);
+  rpc rpush (RPushRequest) returns (IntResponse);
+}
+
+// Generic String Type Response
+message StringResponse {
+  // String result
+  optional string result = 1;
+}
+
+// Generic Integer Type Response
+message IntResponse {
+  // Integer result
+  int64 result = 1;
+}
+
+// Generic List<String> Type Response
+message StringListResponse {
+  // List<String> result
+  repeated string result = 1;
+}
+
+// https://redis.io/commands/keys
+message KeysRequest {
+  string pattern = 1;
+}
+
+// https://redis.io/commands/subscribe
+message SubscribeRequest {
+  repeated string channels = 1;
+}
+
+message SubscribeResponse {
+  string channel = 1;
+  string message = 2;
+}
+
+message PublishRequest {
+  string channel = 1;
+  string message = 2;
+}
+
+message CommandRequest {
+  string command = 1;
+}
+
+message CommandResponse {
+  optional string message = 1;
+}
+
+message SetRequest {
+  string key = 1;
+  string value = 2;
+}
+
+message GetRequest {
+  string key = 1;
+}
+
+message LPushRequest {
+  string key = 1;
+  string element = 2;
+}
+
+message RPushRequest {
+  string key = 1;
+  string element = 2;
+}
+
+message DelRequest {
+  string key = 1;
+}
